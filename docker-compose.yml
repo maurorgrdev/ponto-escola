@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  back-escola:
+    build: 
+      context: ./back-end
+      dockerfile: Dockerfile
+    ports:
+      - "9001:9001"  # Mapeia a porta 9001 do contêiner para a porta 9001 no host
+    depends_on:
+      - db-escola
+
+  db-escola:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: escola
