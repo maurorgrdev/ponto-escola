@@ -9,10 +9,17 @@ services:
       - "9001:9001"  # Mapeia a porta 9001 do contêiner para a porta 9001 no host
     depends_on:
       - db-escola
+    # volumes:
+    #   - ./back-end:/app  # Monta o diretório do código-fonte no contêiner
 
   db-escola:
     image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: escola
+
+volumes:
+  db-data:

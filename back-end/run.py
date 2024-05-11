@@ -1,7 +1,7 @@
 # run.py
 
 import argparse
-from app.app import create_app
+from api.app import create_app
 import time  # Importe o módulo time
 
 # Parse dos argumentos de linha de comando
