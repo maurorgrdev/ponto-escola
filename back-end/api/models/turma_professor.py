@@ -1,3 +1,5 @@
+# turma_professor.py
+
 from api.config import db
 from api.config import Base
 

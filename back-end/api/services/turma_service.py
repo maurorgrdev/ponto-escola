@@ -1,6 +1,6 @@
 # turma_service.py
 
-from api.models import Turma, PresencaProfessorTurmaMateria
+from api.models import Turma
 from api.schemas import TurmaSchema
 from marshmallow import ValidationError
 from api.config import db
@@ -15,7 +15,6 @@ class TurmaService:
     def get_all(self):
         try:
             turmas = Turma.query.all()
-            x = PresencaProfessorTurmaMateria.query.all()
         
             return turmas
         except Exception as e:

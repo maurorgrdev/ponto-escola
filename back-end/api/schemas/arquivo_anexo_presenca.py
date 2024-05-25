@@ -1,6 +1,6 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from api.models.arquivo_anexo_presenca import ArquivoAnexoPresenca
+from api.models.arquivo_anexo_frequencia import ArquivoAnexoFrequencia
 
 class ArquivoSchema(SQLAlchemyAutoSchema):
-        model = ArquivoAnexoPresenca
+        model = ArquivoAnexoFrequencia
         load_instance = True

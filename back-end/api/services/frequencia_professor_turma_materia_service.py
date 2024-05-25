@@ -1,37 +1,37 @@
-from api.models.presenca_professor_turma_materia import PresencaProfessorTurmaMateria
-from api.schemas.presenca_professor_turma_materia_schema import PresencaProfessorTurmaMateriaSchema
+from api.models.frequencia_professor_turma_materia import FrequenciaProfessorTurmaMateria
+from api.schemas.frequencia_professor_turma_materia_schema import FrequenciaProfessorTurmaMateriaSchema
 from marshmallow import ValidationError
 from api.config import db
 from sqlalchemy.exc import SQLAlchemyError
 from flask import request, jsonify
 from werkzeug.utils import secure_filename
 
-class PresencaProfessorTurmaMateriaService:
+class FrequenciaProfessorTurmaMateriaService:
     def __init__(self):
-        self.presenca_professor_schema = PresencaProfessorTurmaMateriaSchema()
+        self.frequencia_professor_schema = FrequenciaProfessorTurmaMateriaSchema()
 
     def create(self, data):
         try:
-            presenca_professor_data = self.presenca_professor_schema.load(data)
-            nova_presenca_professor = PresencaProfessorTurmaMateria(**presenca_professor_data)
+            frequencia_professor_data = self.frequencia_professor_schema.load(data)
+            nova_frequencia_professor = FrequenciaProfessorTurmaMateria(**frequencia_professor_data)
 
-            db.session.add(nova_presenca_professor)
+            db.session.add(nova_frequencia_professor)
             db.session.commit()
 
-            return nova_presenca_professor
+            return nova_frequencia_professor
         except ValidationError as e:
             raise ValueError('Erro de validação: {}'.format(e.messages))
         except SQLAlchemyError as e:
             db.session.rollback()
             raise ValueError('Erro no servidor de banco de dados: {}'.format(str(e)))
 
-    def get_presenca_by_professor_id_and_date(self, professor_id, data):
+    def get_frequencia_by_professor_id_and_date(self, professor_id, data):
         try:
-            presenca_professor = PresencaProfessorTurmaMateria.query.filter_by(professor_id=professor_id, data=data).first()
-            if not presenca_professor:
+            frequencia_professor = FrequenciaProfessorTurmaMateria.query.filter_by(professor_id=professor_id, data=data).first()
+            if not frequencia_professor:
                 raise ValueError('Presença do professor não encontrada')
 
-            return presenca_professor
+            return frequencia_professor
         except SQLAlchemyError as e:
             db.session.rollback()
             raise ValueError('Erro no servidor de banco de dados: {}'.format(str(e)))

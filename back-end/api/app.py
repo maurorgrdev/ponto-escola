@@ -12,7 +12,7 @@ def create_app():
     # Inicialização do banco de dados
     with app.app_context():
         db.init_app(app)
-        # db.drop_all()
+        db.drop_all()
         db.create_all()
 
     migrate = Migrate(app, db)
