@@ -14,3 +14,5 @@ class Materia(Base):
 
     # Relacionamento muitos para muitos com o modelo Turma
     turmas = db.relationship('Turma', secondary='turma_materia', back_populates='materias')
+
+    planos = db.relationship('TurmaPlanoSemanalBimestre', back_populates='materia')

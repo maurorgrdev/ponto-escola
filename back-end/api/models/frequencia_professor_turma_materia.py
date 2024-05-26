@@ -1,3 +1,5 @@
+# frequecia_professor_turma_materia.py
+
 from api.config import db, Base
 from sqlalchemy import Column, Integer, ForeignKey, Date, Boolean
 from sqlalchemy.orm import relationship
@@ -9,3 +11,5 @@ class FrequenciaProfessorTurmaMateria(Base):
     plano_id = Column(Integer, ForeignKey('turma_plano_semanal_bimestre.id'), nullable=False)
     data = Column(Date, nullable=False)
     presente = Column(Boolean, nullable=False)
+
+    plano = relationship('TurmaPlanoSemanalBimestre', back_populates='frequencias')

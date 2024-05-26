@@ -5,7 +5,7 @@ from flask import jsonify, request
 from api.services import ProfessorService
 from api.namespaces.professor_namespace import professor_ns, professor_schema, professor_model
 
-@professor_ns.route('/')
+@professor_ns.route('/<int:id>')
 class ProfessorController(Resource):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -50,7 +50,7 @@ class ProfessorController(Resource):
         except ValueError as e:
             return jsonify({'message': str(e)}), 400
         
-@professor_ns.route('/<int:id>')
+@professor_ns.route('/')
 class ProfessorList(Resource):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

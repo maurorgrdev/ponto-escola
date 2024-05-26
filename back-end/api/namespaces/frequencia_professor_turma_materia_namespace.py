@@ -1,12 +1,12 @@
 from flask_restx import Namespace, fields
-from api.schemas.frequencia_professor_turma_materia_schema import FrequenciaProfessorTurmaMateriaSchema
+from api.schemas import FrequenciaProfessorTurmaMateriaSchema
 
-frequencia_professor_turma_materia_ns = Namespace('frequencia-professor-turma-materia', description='Operações relacionadas a presença do professor')
+frequencia_ns = Namespace('frequencias', description='Operações relacionadas a Frequências')
 
-frequencia_professor_turma_materia_model = frequencia_professor_turma_materia_ns.model('', {
-    'professor_id': fields.Integer(required=True, description=''),
-    'data': fields.Date(required=True, description=''),
-    'materia_id': fields.Integer(required=True, description=''),
-    'turma_id': fields.Integer(required=True, description=''),
-    'presente': fields.Boolean(required=True, description='')
+frequencia_model = frequencia_ns.model('FrequenciaProfessorTurmaMateria', {
+    'plano_id': fields.Integer(required=True, description='ID do Plano Semanal do Bimestre'),
+    'data': fields.Date(required=True, description='Data da Frequência'),
+    'presente': fields.Boolean(description="Flag para registrar presenca")
 })
+
+frequencia_schema = FrequenciaProfessorTurmaMateriaSchema()

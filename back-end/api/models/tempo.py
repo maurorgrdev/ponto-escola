@@ -9,3 +9,5 @@ class Tempo(Base):
     descricao = Column(String(50), nullable=False)
     horario_inicio = Column(Time, nullable=False)
     horario_fim = Column(Time, nullable=False)
+
+    planos = db.relationship('TurmaPlanoSemanalBimestre', back_populates='tempo')

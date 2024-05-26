@@ -9,3 +9,5 @@ class Bimestre(Base):
     descricao = Column(String(50), nullable=False)
     data_inicio = Column(Date, nullable=False)
     data_fim = Column(Date, nullable=False)
+
+    planos = db.relationship('TurmaPlanoSemanalBimestre', back_populates='bimestre')

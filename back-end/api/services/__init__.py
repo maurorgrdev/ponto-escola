@@ -6,3 +6,6 @@ from .professor_service import ProfessorService
 from .turma_materia_service import TurmaMateriaService
 from .turma_professor_service import TurmaProfessorService
 from .professor_materia_service import ProfessorMateriaService
+from .bimestre_service import BimestreService
+from .tempo_service import TempoService
+from .frequencia_professor_turma_materia_service import FrequenciaProfessorTurmaMateriaService as FrequenciaService

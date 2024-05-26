@@ -1,4 +1,4 @@
-from api.models.frequencia_professor_turma_materia import FrequenciaProfessorTurmaMateria
+from api.models import FrequenciaProfessorTurmaMateria, TurmaPlanoSemanalBimestre
 from api.schemas.frequencia_professor_turma_materia_schema import FrequenciaProfessorTurmaMateriaSchema
 from marshmallow import ValidationError
 from api.config import db
@@ -8,33 +8,50 @@ from werkzeug.utils import secure_filename
 
 class FrequenciaProfessorTurmaMateriaService:
     def __init__(self):
-        self.frequencia_professor_schema = FrequenciaProfessorTurmaMateriaSchema()
+        self.frequencia_schema = FrequenciaProfessorTurmaMateriaSchema()
 
-    def create(self, data):
+    def registrar_presenca(self, data):
         try:
-            frequencia_professor_data = self.frequencia_professor_schema.load(data)
-            nova_frequencia_professor = FrequenciaProfessorTurmaMateria(**frequencia_professor_data)
-
-            db.session.add(nova_frequencia_professor)
+            frequencia_data = self.frequencia_schema.load(data)
+            frequencia_data['presente'] = True
+            nova_frequencia = FrequenciaProfessorTurmaMateria(**frequencia_data)
+            db.session.add(nova_frequencia)
             db.session.commit()
+            return nova_frequencia
+        except ValidationError as err:
+            return err.messages
 
-            return nova_frequencia_professor
-        except ValidationError as e:
-            raise ValueError('Erro de validação: {}'.format(e.messages))
-        except SQLAlchemyError as e:
-            db.session.rollback()
-            raise ValueError('Erro no servidor de banco de dados: {}'.format(str(e)))
-
-    def get_frequencia_by_professor_id_and_date(self, professor_id, data):
+    def registrar_ausencia(self, data):
         try:
-            frequencia_professor = FrequenciaProfessorTurmaMateria.query.filter_by(professor_id=professor_id, data=data).first()
-            if not frequencia_professor:
-                raise ValueError('Presença do professor não encontrada')
+            frequencia_data = self.frequencia_schema.load(data)
+            frequencia_data['presente'] = False
+            nova_frequencia = FrequenciaProfessorTurmaMateria(**frequencia_data)
+            db.session.add(nova_frequencia)
+            db.session.commit()
+            return nova_frequencia
+        except ValidationError as err:
+            return err.messages
 
-            return frequencia_professor
-        except SQLAlchemyError as e:
-            db.session.rollback()
-            raise ValueError('Erro no servidor de banco de dados: {}'.format(str(e)))
+    def relatorio_frequencia_by_bimestre_professor(self, bimestre_id, professor_id):
+        try:
+            frequencias = FrequenciaProfessorTurmaMateria.query \
+                .join(TurmaPlanoSemanalBimestre) \
+                .filter(TurmaPlanoSemanalBimestre.bimestre_id == bimestre_id) \
+                .filter(TurmaPlanoSemanalBimestre.professor_id == professor_id) \
+                .all()
+            return frequencias
+        except Exception as e:
+            return e
+
+    def relatorio_frequencia_by_bimestre(self, bimestre_id):
+        try:
+            frequencias = FrequenciaProfessorTurmaMateria.query \
+                .join(TurmaPlanoSemanalBimestre) \
+                .filter(TurmaPlanoSemanalBimestre.bimestre_id == bimestre_id) \
+                .all()
+            return frequencias
+        except Exception as e:
+            return e
 
     def upload_arquivo(self):
         try:

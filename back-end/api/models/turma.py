@@ -15,3 +15,5 @@ class Turma(Base):
 
     # Relacionamento muitos para muitos com o modelo Professor
     professores = db.relationship('Professor', secondary='turma_professor', back_populates='turmas')
+
+    planos = db.relationship('TurmaPlanoSemanalBimestre', back_populates='turma')
