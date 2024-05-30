@@ -77,3 +77,16 @@ class ProfessorList(Resource):
             })
         except ValueError as e:
             return {'message': str(e)}
+
+@professor_ns.route('/relatorio-faltas')
+class ProfessorFaltas(Resource):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.professor_service = ProfessorService()
+
+    def get(self):
+        try:
+            relatorio = self.professor_service.get_professor_faltas()
+            return jsonify({'relatorio': relatorio})
+        except ValueError as e:
+            return jsonify({'message': str(e)}), 404

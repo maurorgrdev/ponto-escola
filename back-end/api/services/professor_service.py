@@ -5,6 +5,7 @@ from api.schemas import ProfessorSchema  # Importe o schema de Professor
 from marshmallow import ValidationError
 from api.config import db
 from functools import wraps
+from api.models import FrequenciaProfessorTurmaMateria, TurmaPlanoSemanalBimestre
 
 class ProfessorService:
     def __init__(self):
@@ -55,3 +56,21 @@ class ProfessorService:
         db.session.commit()
 
         return novo_professor
+
+    def get_professor_faltas(self):
+        relatorio = []
+        professores = Professor.query.all()
+        for professor in professores:
+            professor_data = self.professor_schema.dump(professor)
+            professor_data['materias'] = []
+            planos = TurmaPlanoSemanalBimestre.query.filter_by(professor_id=professor.id).all()
+            for plano in planos:
+                faltas = FrequenciaProfessorTurmaMateria.query.filter_by(plano_id=plano.id, presente=False).count()
+                materia_turma = {
+                    'materia_id': plano.materia_id,
+                    'turma_id': plano.turma_id,
+                    'faltas': faltas
+                }
+                professor_data['materias'].append(materia_turma)
+            relatorio.append(professor_data)
+        return relatorio
